@@ -8,25 +8,35 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <DataTemplate x:Key="WalutyListSzablon">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding KodWaluty}"></TextBlock>
+                <TextBlock Text=": "></TextBlock>
+                <TextBlock Text="{Binding KursSredni}"></TextBlock>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+    
     <Grid Loaded="Grid_Loaded">
         <TextBlock HorizontalAlignment="Left" Margin="125,96,0,0" TextWrapping="Wrap" Text="Kalkulator walut" VerticalAlignment="Top" FontFamily="Arial Black" FontSize="30"/>
-        <StackPanel Margin="125,219,698,107">
+        <StackPanel Margin="125,219,0,0">
+        <TextBlock Text="Podano nieprawidłową kwotę!" x:Name="Blad" Foreground="#FFFFAFAF" FontStyle="Italic" FocusVisualMargin="0,20,0,20" FontSize="20" Height="100"  Visibility="Collapsed"></TextBlock>
             <StackPanel Orientation="Horizontal">
             <TextBlock TextWrapping="Wrap" Text="Kwota: "/>
-            <TextBox x:Name="KwotaTbx" TextWrapping="Wrap" Text="" Width="125" Margin="50,0,0,0"/>
+            <TextBox x:Name="KwotaTbx" TextWrapping="Wrap" Text="" Width="125" Margin="50,0,0,0" InputScope="CurrencyAmount" TextChanged="KwotaTbx_TextChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Height="40">
                 
             <TextBlock HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Przeliczona: " VerticalAlignment="Top"/>
             <TextBlock x:Name="PrzeliczonaTb" HorizontalAlignment="Left" Margin="50,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <ListBox Height="100" x:Name="WalutaWejscieLbx"/>
-                <ListBox Height="100" x:Name="WalutaWyjscieLbx"/>
+            <TextBlock Text="z waluty ➡️ na walutę" Margin="30,20,0,20"></TextBlock>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                <ListBox Height="300" x:Name="WalutaWejscieLbx" ItemTemplate="{StaticResource WalutyListSzablon}" SelectedIndex="0" SelectionChanged="WalutaLbx_SelectionChanged"/>
+                <ListBox Height="300" x:Name="WalutaWyjscieLbx" ItemTemplate="{StaticResource WalutyListSzablon}" SelectedIndex="1" SelectionChanged="WalutaLbx_SelectionChanged"/>
                 
             </StackPanel>
-
-
         </StackPanel>
 
     </Grid>

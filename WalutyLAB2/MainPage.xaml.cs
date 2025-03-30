@@ -32,6 +32,32 @@ namespace WalutyLAB2
             this.InitializeComponent();
         }
 
+        void Przelicz()
+        {
+            if (WalutaWejscieLbx.SelectedIndex == -1 || WalutaWyjscieLbx.SelectedIndex == -1 || KwotaTbx.Text == "")
+                return;
+            
+
+            var ZWaluty = WalutaWejscieLbx.SelectedItem as PozycjaTabA;
+            var NaWalute = WalutaWyjscieLbx.SelectedItem as PozycjaTabA;
+
+            decimal kwota;
+
+            if( decimal.TryParse(KwotaTbx.Text, out kwota ))
+            {
+                Blad.Visibility = Visibility.Collapsed;
+
+                decimal kwotaNaPLN = kwota * ZWaluty.Kurs;
+                decimal kwotaZPLN = kwotaNaPLN / NaWalute.Kurs;
+
+                PrzeliczonaTb.Text = string.Format("{0:f2} {1}", kwotaZPLN, NaWalute.KodWaluty);
+            }
+            else
+            {
+                Blad.Visibility = Visibility.Visible;
+            }
+        }
+
         private async void Grid_Loaded(object sender, RoutedEventArgs e)
         {
             var klient = new HttpClient();
@@ -52,10 +78,24 @@ namespace WalutyLAB2
                 kursyWalut.Add(pozycjaTabA);
             }
 
+            var pln = new PozycjaTabA() { NazwaWaluty = "Złoty polski", KodWaluty = "PLN", Przelicznik = "1", KursSredni = "1,0000" };
+
+            kursyWalut.Insert(0, pln);
 
             // ustawiamy listę na naszych listboxach
             WalutaWejscieLbx.ItemsSource = kursyWalut;
             WalutaWyjscieLbx.ItemsSource = kursyWalut;
+        }
+
+        private void KwotaTbx_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Przelicz();
+        }
+
+
+        private void WalutaLbx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Przelicz();
         }
     }
 }
